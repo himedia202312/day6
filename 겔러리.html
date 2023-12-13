@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #wrapper{
+            width:1000px;
+            height:800px;
+            background-color: yellow;
+            margin: auto;
+        }
+        #header{
+            width:100%;
+            height:100px;
+            background-color: aqua;
+        }
+        #content{
+            width:100%;
+            height: 600px;
+            background-color: bisque;
+        }
+        #footer{
+            width:100%;
+            height: 100px;
+            background-color: cadetblue;
+            position: relative;
+        }
+        #detail{
+            width:100%;
+            height:100%;
+        }
+    </style>
+    <script>
+        let arr=[
+            "a.jpg",
+            "b.jpg",
+            "c.jpg",
+            "d.jpg",
+            "e.jpg",
+            "f.jpg",
+            "g.jpg",
+            "h.jpg",
+            "i.jpg",
+            "j.jpg"
+        ];
+        
+        let content;
+        let footer;
+        let box;
+        let a=0.1;
+        let targetX=0;
+        let detail;
+        let currentIndex=0; //현재 내가 가리키고 있는 이미지 index
+
+        //푸터에 썸네일 생성하기
+        function createImage(){
+            for(let i=0;i<arr.length;i++){
+                let img=document.createElement("img");
+                img.src="../images/sea/"+arr[i];
+                img.style.width=90+"px";
+                img.style.height=90+"px";
+                img.style.position="absolute";                        
+                img.style.left=5+((90+5)*i)+"px";
+                img.style.top=5+"px";
+                
+                //이미지마다, 클릭이벤트 걸자 
+                img.addEventListener("click", function(){
+                    //console.log("나 위치는 ",((90+5)*i);
+                    targetX =  (90+5)*i;
+                    
+                    console.log("저는 배열의 ",i, "번째에요");    
+                    currentIndex=i;
+
+                    //큰이미지로 보여주기 
+                    showDetail(img.src);
+                });
+
+
+                //footer에 부착 
+                footer.appendChild(img);
+            }
+        }
+        
+        function createPointer(){
+            box=document.createElement("div");
+            box.style.border="5px solid red";
+            box.style.width=90+"px";
+            box.style.height=90+"px";
+            box.style.position="absolute";
+            box.style.left=0+"px";
+            box.style.top=0+"px";
+
+            //푸터에 부착 
+            footer.appendChild(box);            
+        }
+
+        function pointerMove(){
+            //사각형을 x축으로만 움직이게 한다.
+            box.style.left=parseFloat(box.style.left)+a*(targetX- parseFloat(box.style.left))+"px";
+        }
+        function gameLoop(){
+            pointerMove();
+        }
+
+        //큰 이미지 보여주기 
+        function showDetail(path){
+            detail.src=path;
+        }
+
+        //다음 사진 나오게..
+        function next(){
+            currentIndex++;
+            targetX =  (90+5)*currentIndex;
+            showDetail("../images/sea/"+arr[currentIndex]);
+        }
+        function prev(){
+            currentIndex--;
+            targetX =  (90+5)*currentIndex;
+            showDetail("../images/sea/"+arr[currentIndex]);
+        }
+
+        function init(){
+            content=document.getElementById("content");
+            footer=document.getElementById("footer");
+            detail=document.getElementById("detail");
+
+            createImage();//썸네일 생성
+            createPointer();//포인터 역할의 사각형 생성
+            showDetail("../images/sea/"+arr[0]);
+        }
+        addEventListener("load", function(){
+            init();
+            setInterval("gameLoop()", 10);
+        });
+
+    </script>
+</head>
+<body>
+
+    <div id="wrapper">
+        <div id="header">
+            <button onClick="prev()">이전</button>
+            <button onClick="next()">다음</button>
+        </div>
+        <div id="content"><img id="detail"></div>
+        <div id="footer"></div>
+    </div>
+    
+</body>
+</html>
+
+
+

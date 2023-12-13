@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #wrapper{
+            width:450px;
+            height:500px;
+            margin: auto;
+        }
+        #quiz{
+            width:100%;
+            height:200px;
+            background-color: aquamarine;
+            font-size:110px;
+            text-align: center;
+        }
+        #key{
+            width:100%;
+            height:100px;
+            background-color: bisque;
+        }
+        #key input{
+            width:98%;
+            height:98%;            
+            font-size:50px;
+            text-align: center;
+        }
+        #feedback{
+            width:100%;
+            height:150px;
+            background-color: brown;
+            font-size:120px;
+            font-weight: bold;
+            text-align: center;
+        }
+        #result{
+            width:100%;
+            height:50px;
+            background-color: blue;
+        }
+    </style>
+    <script>
+        //게임에 사용할 단어를 메모리에 올리자 
+        let word=["화성","고양이","마우스","광화문","무지개","의자","세종대왕","휴대폰","한강","병원"];
+        
+        let keyword;
+        let quiz;
+        let feedback; //ox 여부 
+        let result; //점수영역 
+        let n=0; //어떤 단어를 접근할지를 결정짓는 index
+        let score=0; //점수가 누적될 전역변수
+
+        function next(){
+            if(keyword.value==quiz.innerText){ //입력한 단어와 퀴즈가 동일할때만..
+                n++;
+                quiz.innerText=word[n];
+
+                //입력한 텍스트는 다시 초기화!!
+                keyword.value="";
+
+                //O 출력 
+                feedback.innerText="O";
+                score+=10; //점수 증가
+                setScore(); //점수 출력
+            }else{
+                feedback.innerText="X";
+            }
+        }
+
+        //점수 처리 (수시로 사용되므로 재사용성을 위해 함수로 정의)
+        function setScore(){
+            result.innerText=score+" 점";
+        }
+
+        function init(){
+            keyword=document.getElementById("keyword");
+            quiz = document.getElementById("quiz");
+            feedback = document.getElementById("feedback");
+            result = document.getElementById("result");
+
+            quiz.innerText=word[0];
+            
+            //keyword 위치 커서 올리기 
+            keyword.focus();
+
+            //점수출력 
+            setScore();            
+
+            keyword.addEventListener("keyup", function(){
+                //수많은 키 중에 엔터를 쳤을때만..
+                if(event.keyCode==13){
+                    next();
+                }
+                
+            });
+        }
+        addEventListener("load", function(){
+            init();
+        }); 
+
+    </script>
+</head>
+<body>
+    <div id="wrapper">
+        <div id="quiz"></div>
+        <div id="key">
+            <input type="text" id="keyword">
+        </div>
+        <div id="feedback"></div>
+        <div id="result">0</div>
+    </div>    
+</body>
+</html>
+
+
+
+
+
